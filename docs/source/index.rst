@@ -22,6 +22,9 @@ Contents
 
    fmri
    dmri
+
+The following sections will be added.
+.. note::
    templates
    r
    usage
