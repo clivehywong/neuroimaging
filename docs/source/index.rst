@@ -19,7 +19,7 @@ Contents
 --------
 
 .. toctree::
-
+   tortoise/index
    fmri
    dmri
 
