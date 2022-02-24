@@ -13,7 +13,7 @@ Useful ones:
 * %p=protocol, 
 * %d=description, 
 * %z=sequence name, 
-** %d, %p, %z should tell what is scanned with the sequence. It actually depends on scanner brand and protocol setup. 
+  * %d, %p, %z should tell what is scanned with the sequence. It actually depends on scanner brand and protocol setup. 
 
 * %r=instance number, 
 * %e=echo number, <Maybe useful for fieldmap, which contained multi-echo data>
