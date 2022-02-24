@@ -33,11 +33,16 @@ Not Useful:
 * %x=study ID; 
 
 Never:
+
 * %i=ID of patient, 
 * %n=name of patient, 
 
 Examples
 =========
+
+## Generate 
+
+dcm2niix -b y -i y -z 
 
 ## Generate ONLY json files (-b o), named with useful headers. Useful to decide how to formulate the final conversion.
 
