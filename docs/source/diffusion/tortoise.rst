@@ -1,4 +1,5 @@
-# Preprocessing Diffusion Imaging Data with TORTOISE
+Preprocessing Diffusion Imaging Data with TORTOISE
+###################################################
 
 `Tortoise DTI <https://tortoise.nibib.nih.gov/>` is an intensive preprocessing pipeline.
 
@@ -15,88 +16,96 @@ The preprocessing required several software packages to prepare necessary files,
   - **DIFFPREP from Tortoise**: Preprocess the dw images.
   - **fsleyes from fsl**: Visual check the preprocessed images.
   - **EstimateTensorNLLS from Tortoise**: Tensor estimation
-  - 
   
-## On simulated T2 image
+On simulated T2 image
+**********************
 
 A high-resolution T2-weighted image is always better. The problem is T2 images are
 usually not collected, or with high slice thickness.
 
 Taylor (2016 Hum Brain Mapp) suggested that a simulated T2 image could rectify the artifacts. 
 
-## On the workflow
+On the workflow
+***************
 
 The first attempt was to align T1 to AC-PC before brain extraction. This step would end up in inaccurate brain extraction.
 
-## On Final QC
+On Final QC
+***********
 
 See the link below to understand different aspects of artifacts.
 https://tortoise.nibib.nih.gov/tortoise/v313/11-step-4quality-assessment
 
-# The Entire Script
+The Entire Script
+*****************
+
 The script below is the entire processing pipeline. The steps shall be run one step after another for the first subject.
 
-''
-sub=sub-14465
+.. code-block:: Bash
 
-# Brain Extraction
-echo "[[ Brain Extraction ]]"
-antsBE.sh ${f}_T1w.nii ${f}_T1w
+  sub=sub-12345
 
-# AC-PC
-echo "[[ AC-PC ]]"
-acpcdetect -i ${sub}_T1w.nii -center-AC
+  # Brain Extraction
+  echo "[[ Brain Extraction ]]"
+  antsBE.sh ${f}_T1w.nii ${f}_T1w
 
-echo "[[ Create AC-PC aligned T1w and Binary Mask ]]"
-flirt -in ${sub}_T1w_BrainExtractionMask.nii.gz -out ${sub}_ACPC_mask -ref ${sub}_T1w_BrainExtractionMask.nii.gz -applyxfm -init ${sub}_T1w_FSL.mat -interp nearestneighbour
-flirt -in ${sub}_T1w.nii -out ${sub}_ACPC -ref ${sub}_T1w.nii -applyxfm -init ${sub}_T1w_FSL.mat
+  # AC-PC
+  echo "[[ AC-PC ]]"
+  acpcdetect -i ${sub}_T1w.nii -center-AC
 
-# Imitate T2 from T1
-echo "[[ Create T2 ]]"
-fat_proc_imit2w_from_t1w -inset ${sub}_T1w_ACPC.nii.gz -mask ${sub}_T1w_ACPC_mask.nii.gz -prefix ${sub}_T1w_ACPC_T2w
+  echo "[[ Create AC-PC aligned T1w and Binary Mask ]]"
+  flirt -in ${sub}_T1w_BrainExtractionMask.nii.gz -out ${sub}_ACPC_mask -ref ${sub}_T1w_BrainExtractionMask.nii.gz -applyxfm -init ${sub}_T1w_FSL.mat -interp nearestneighbour
+  flirt -in ${sub}_T1w.nii -out ${sub}_ACPC -ref ${sub}_T1w.nii -applyxfm -init ${sub}_T1w_FSL.mat
 
-# DTIFIT
-echo "[[ Fit Tensor: dtifit/fsl ]]"
-dtifit -k ${sub}_dwi.nii -m ${sub}_dwi_brain_mask.nii -r ${sub}_dwi.bvec -b ${sub}_dwi.bval -o ${sub}_dtifit/dtifit
+  # Imitate T2 from T1
+  echo "[[ Create T2 ]]"
+  fat_proc_imit2w_from_t1w -inset ${sub}_T1w_ACPC.nii.gz -mask ${sub}_T1w_ACPC_mask.nii.gz -prefix ${sub}_T1w_ACPC_T2w
 
-# Check
-echo "Visual Check the Principal axis"
-echo "fsleyes ${sub}_dtifit"
+  # DTIFIT
+  echo "[[ Fit Tensor: dtifit/fsl ]]"
+  dtifit -k ${sub}_dwi.nii -m ${sub}_dwi_brain_mask.nii -r ${sub}_dwi.bvec -b ${sub}_dwi.bval -o ${sub}_dtifit/dtifit
 
-# Flip b-vectors
-echo "[[ Flip b-vectors ]]"
-echo " If the 
-dwi_flip_bvec.sh sub-14465_dwi.bvec
+  # Check
+  echo "Visual Check the Principal axis"
+  echo "fsleyes ${sub}_dtifit"
 
-# Import NIFTI
-echo "[[ Import NIFTI ]]"
-ImportNIFTI -i sub-14465_dwi.nii -b sub-14465_dwi.bval -v sub-14465_dwi.bvec -p vertical
+  # Flip b-vectors
+  echo "[[ Flip b-vectors ]]"
+  echo " If the 
+  dwi_flip_bvec.sh sub-14465_dwi.bvec
 
-# "[[ Fit Tensor: EstimateTensorWLLS/Tortoise ]]"
-EstimateTensorWLLS -i sub-14465_dwi_proc/sub-14465_dwi.list -m sub-14465_dwi_brain_mask.nii
+  # Import NIFTI
+  echo "[[ Import NIFTI ]]"
+  ImportNIFTI -i sub-14465_dwi.nii -b sub-14465_dwi.bval -v sub-14465_dwi.bvec -p vertical
 
-# DIFFPREP
-echo "[[ DIFFPREP -i dwi -s T2 ]]"
-DIFFPREP -i ${sub}_dwi_proc/${sub}_dwi.list -s ${sub}_T1w_ACPC_T2w.nii.gz -e ANTSSyN
+  # "[[ Fit Tensor: EstimateTensorWLLS/Tortoise ]]"
+  EstimateTensorWLLS -i sub-14465_dwi_proc/sub-14465_dwi.list -m sub-14465_dwi_brain_mask.nii
 
-# Estimate Tensor
-echo "[[ Estimate Tensors ]]"
-EstimateTensorNLLS -i ${sub}_dwi_proc/${sub}_dwi_DMC.list
+  # DIFFPREP
+  echo "[[ DIFFPREP -i dwi -s T2 ]]"
+  DIFFPREP -i ${sub}_dwi_proc/${sub}_dwi.list -s ${sub}_T1w_ACPC_T2w.nii.gz -e ANTSSyN
 
-# Compute Tensor Maps
-echo "[[ Compute Tensor Maps ]]"
-ComputeAllTensorMaps.bash ${sub}_dwi_proc/${sub}_dwi_DMC_N1_DT.nii
+  # Estimate Tensor
+  echo "[[ Estimate Tensors ]]"
+  EstimateTensorNLLS -i ${sub}_dwi_proc/${sub}_dwi_DMC.list
+
+  # Compute Tensor Maps
+  echo "[[ Compute Tensor Maps ]]"
+  ComputeAllTensorMaps.bash ${sub}_dwi_proc/${sub}_dwi_DMC_N1_DT.nii
 
 
 
-## acpcdetect
+acpcdetect
+**********
 
 The first step involved AC-PC detection. After running the script below, the file sub-00001
-::
+.. code-block:: Bash
   f=sub-00001
   acpcdetect -i ${f}_T1w.nii -center-AC
   
-# References  
+References  
+**********
+
 Taylor, P. A., Alhamud, A., van der Kouwe, A., Saleh, M. G., Laughton, B., & Meintjes, E. (2016). 
 Assessing the performance of different DTI motion correction strategies in the presence of 
 EPI distortion correction. Hum. Brain Mapp., 37(12), 4405–4424. doi: 10.1002/hbm.23318
