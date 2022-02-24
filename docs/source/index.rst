@@ -13,7 +13,13 @@ Contents
 
 .. toctree::
    :caption: DICOM/BIDS
+   
    dicom/dcm2niix_tricks
+
+.. toctree::
+   :caption: DTI
+   
+   diffusion/tortoise
 
 The following sections will be added.
 .. note::
