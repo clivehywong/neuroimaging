@@ -40,9 +40,9 @@ Never:
 Examples
 =========
 
-## Generate 
+## Generate NII/JSON, %f will be replaced with folder name (sub-001), %t date/time, %p protocol, %r instance
 
-dcm2niix -b y -i y -z 
+dcm2niix -b y -i y -z y -o . -f nii/%f/%t/%p_%r dicom/sub-001
 
 ## Generate ONLY json files (-b o), named with useful headers. Useful to decide how to formulate the final conversion.
 
