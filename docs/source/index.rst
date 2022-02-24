@@ -12,6 +12,7 @@ Contents
 --------
 
 .. toctree::
+   dicom
    diffusion/tortoise
    fmri
    dmri
