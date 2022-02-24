@@ -12,10 +12,8 @@ Contents
 --------
 
 .. toctree::
-   dicom
-   diffusion/tortoise
-   fmri
-   dmri
+   :caption: DICOM/BIDS
+   dicom/dcm2niix_tricks
 
 The following sections will be added.
 .. note::
