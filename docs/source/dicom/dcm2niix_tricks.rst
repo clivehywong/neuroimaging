@@ -7,12 +7,13 @@ dcm2niix file name options: default '%f_%p_%t_%s'
 
 Useful ones:
 
-* %s=series number, 
+* %f=folder name, 
 * %t=time, 
+* %s=series number, 
 
-* %p=protocol, 
-* %d=description, 
-* %z=sequence name, 
+* %p=protocol,
+* %d=description,
+* %z=sequence name,
   * %d, %p, %z should tell what is scanned with the sequence. It actually depends on scanner brand and protocol setup. 
 * %r=instance number, Useful for fieldmap. Two echos will endup in two instance number (for Siemens).
 * %e=echo number, <Maybe useful for fieldmap, which contained multi-echo data>
@@ -21,7 +22,6 @@ Not Useful:
 
 * %a=antenna (coil) name, 
 * %b=basename, %c=comments, 
-* %f=folder name, 
 * %g=accession number, 
 * %j=seriesInstanceUID, 
 * %k=studyInstanceUID, 
