@@ -7,53 +7,34 @@ dcm2niix file name options: default '%f_%p_%t_%s'
 
 Useful ones:
 
-%s=series number, 
+* %s=series number, 
+* %t=time, 
 
-%t=time, 
+* %p=protocol, 
+* %d=description, 
+* %z=sequence name, 
+** %d, %p, %z should tell what is scanned with the sequence. It actually depends on scanner brand and protocol setup. 
 
-%e=echo number, <Maybe useful for fieldmap, which contained multi-echo data>
-
-%d=description, 
-
-%p=protocol, 
-
-%z=sequence name, 
-
-%d, %p, %z should tell what is scanned with the sequence. It actually depends on scanner brand and protocol setup. 
+* %r=instance number, 
+* %e=echo number, <Maybe useful for fieldmap, which contained multi-echo data>
 
 Not Useful:
 
-%a=antenna (coil) name, 
-
-%b=basename, %c=comments, 
-
-%f=folder name, 
-
-%g=accession number, 
-
-%j=seriesInstanceUID, 
-
-%k=studyInstanceUID, 
-
-%m=manufacturer, 
-
-%o=mediaObjectInstanceUID, 
-
-%r=instance number, 
-
-%u=acquisition number, 
-
-%v=vendor, 
-
-%x=study ID; 
+* %a=antenna (coil) name, 
+* %b=basename, %c=comments, 
+* %f=folder name, 
+* %g=accession number, 
+* %j=seriesInstanceUID, 
+* %k=studyInstanceUID, 
+* %m=manufacturer, 
+* %o=mediaObjectInstanceUID, 
+* %u=acquisition number, 
+* %v=vendor, 
+* %x=study ID; 
 
 Never:
-
-%i=ID of patient, 
-
-%n=name of patient, 
-
-
+* %i=ID of patient, 
+* %n=name of patient, 
 
 Examples
 =========
