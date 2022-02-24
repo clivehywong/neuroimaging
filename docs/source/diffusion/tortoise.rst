@@ -94,15 +94,16 @@ The script below is the entire processing pipeline. The steps shall be run one s
   ComputeAllTensorMaps.bash ${sub}_dwi_proc/${sub}_dwi_DMC_N1_DT.nii
 
 
-
 acpcdetect
 **********
 
 The first step involved AC-PC detection. After running the script below, the file sub-00001
 .. code-block:: Bash
+
   f=sub-00001
   acpcdetect -i ${f}_T1w.nii -center-AC
-  
+
+
 References  
 **********
 
