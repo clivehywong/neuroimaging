@@ -98,6 +98,7 @@ acpcdetect
 **********
 
 The first step involved AC-PC detection. After running the script below, the file sub-00001
+
 .. code-block:: Bash
 
   f=sub-00001
