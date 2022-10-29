@@ -17,3 +17,9 @@ Installation with Perpetual License (Mac)
 14. Replace "SERVER server_name hostid port_number" with the line copied in step 12.
 15. Start the license with "maci64/lmgrd"
 16. Start MATLAB.
+
+SPM mex files
+-------------
+
+Run this:
+find . -name "*.mexmaci64" -exec xattr -d com.apple.quarantine {} \;
